@@ -9,16 +9,23 @@ function renderSidebar() {
     return;
   }
 
+  const isAdmin = auth.isAdmin();
+
   sidebar.innerHTML = `
     <nav class="sidebar-nav" aria-label="เมนูหลัก">
       <button class="sidebar-link" data-page="dashboard" type="button">🏠 แดชบอร์ด</button>
       <button class="sidebar-link" type="button" disabled>📝 บันทึกงาน <span>เร็ว ๆ นี้</span></button>
       <button class="sidebar-link" type="button" disabled>📚 องค์ความรู้ <span>เร็ว ๆ นี้</span></button>
+      ${isAdmin ? `
+        <hr style="margin:var(--spacing-sm) 0;border-color:var(--border-color)">
+        <button class="sidebar-link" data-page="admin-announcements" type="button">📢 จัดการประกาศ</button>
+      ` : ''}
     </nav>`;
 
-  const dashboard = sidebar.querySelector('[data-page="dashboard"]');
-  dashboard.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-    router.go('dashboard');
+  sidebar.querySelectorAll('[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      router.go(btn.dataset.page);
+    });
   });
 }

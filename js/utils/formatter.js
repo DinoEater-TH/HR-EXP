@@ -1,7 +1,12 @@
 // 📝 Formatter (จัดรูปแบบข้อมูล)
-// ใช้จัดรูปแบบข้อมูลให้แสดงผลได้สวยงาม
 
 class Formatter {
+  
+  static escapeHtml(val) {
+    const el = document.createElement('span');
+    el.textContent = val || '';
+    return el.innerHTML;
+  }
   
   static formatDate(dateString, format = SYSTEM_CONSTANTS.DATE_FORMATS.DATE) {
     if (!dateString) return "N/A";

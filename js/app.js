@@ -14,19 +14,28 @@ async function initializeApp() {
   const loading = document.getElementById('loading-screen');
   const app = document.getElementById('app');
 
-  // ตรวจ Backend ก่อนแสดงผล เพื่อให้ทราบว่า URL ที่ตั้งค่าใช้งานได้
   const health = await api.healthCheck();
   if (!health.success) {
-    showToast('ไม่สามารถเชื่อมต่อ Backend ได้ กรุณาตรวจสอบการ Deploy', 'error');
+    showToast('ไม่สามารถเชื่อมต่อ Backend ได้', 'error');
   }
 
-  auth.loadSession();
+  const authed = auth.loadSession();
   renderHeader();
   renderSidebar();
-  router.render(auth.isAuthenticated() ? 'dashboard' : 'login');
 
-  loading.classList.add('hidden');
-  app.classList.remove('hidden');
+  if (authed) {
+    announcementManager.run(() => {
+      renderHeader();
+      renderSidebar();
+      router.render('dashboard');
+      loading.classList.add('hidden');
+      app.classList.remove('hidden');
+    });
+  } else {
+    router.render('login');
+    loading.classList.add('hidden');
+    app.classList.remove('hidden');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);
