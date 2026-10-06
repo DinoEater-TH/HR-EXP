@@ -1,8 +1,6 @@
 // 📝 Formatter (จัดรูปแบบข้อมูล)
 // ใช้จัดรูปแบบข้อมูลให้แสดงผลได้สวยงาม
 
-const { SYSTEM_CONSTANTS } = require('../constants.js');
-
 class Formatter {
   
   static formatDate(dateString, format = SYSTEM_CONSTANTS.DATE_FORMATS.DATE) {

@@ -1,8 +1,6 @@
 // 🔍 Validator (ตรวจสอบข้อมูล)
 // ใช้ตรวจสอบข้อมูลก่อนส่งไป Backend
 
-const { SYSTEM_CONSTANTS } = require('../constants.js');
-
 class Validator {
   
   static validateEmail(email) {
