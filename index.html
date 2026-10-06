@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f6e3d">
+  <meta name="description" content="HR KKU Experience & Knowledge Platform">
+  <title>HR KKU Experience & Knowledge Platform</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">🏢</div>
+      <h2 class="loading-title">HR KKU EXP</h2>
+      <p class="loading-text">กำลังโหลด...</p>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+  
+  <!-- App Container -->
+  <div id="app" class="app-container hidden">
+    <!-- Header -->
+    <header id="header" class="header"></header>
+    
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+      <!-- Page content will be rendered here -->
+    </main>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar"></aside>
+    
+    <!-- Footer -->
+    <footer id="footer" class="footer"></footer>
+  </div>
+  
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+  
+  <!-- Modal Container -->
+  <div id="modal-container" class="modal-container"></div>
+  
+  <!-- JavaScript -->
+  <script src="js/config.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/utils/validator.js"></script>
+  <script src="js/utils/formatter.js"></script>
+  <script src="js/api-client.js"></script>
+  <script src="js/auth-manager.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/components/sidebar.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
