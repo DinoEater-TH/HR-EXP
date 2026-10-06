@@ -15,7 +15,7 @@ const APP_CONFIG = {
   supportedLanguages: ["th", "en"],
   
   // URL ของ Backend (Google Apps Script)
-  backendUrl: "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+  backendUrl: "https://script.google.com/macros/s/AKfycbyliyH29IfLQUvj_VUDD1rMiDAul1teq8TIzLooOvfYdSY2bOYxgVJ__fp17VEg81R_/exec",
   
   // เวลาหมดอายุของ Token (นาที)
   tokenExpiryMinutes: 60,
