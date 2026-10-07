@@ -105,6 +105,8 @@ function showAIPreview(data) {
   section.innerHTML = html;
   section.classList.remove('hidden');
 
+  rebindEditButtons();
+
   document.getElementById('confirm-btn').addEventListener('click', confirmAndSave);
 }
 
@@ -175,6 +177,51 @@ async function loadWorkLogList() {
 
 function todayStr() {
   return new Date().toISOString().substring(0, 10);
+}
+
+function rebindEditButtons() {
+  document.querySelectorAll('.edit-item-btn').forEach(btn => {
+    if (btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', function() {
+      // trigger click on parent's edit button
+      const type = this.dataset.type;
+      const idx = parseInt(this.dataset.index);
+      const listItem = this.closest('.list-item');
+      const span = listItem.querySelector('span');
+      const currentText = span.textContent;
+
+      listItem.innerHTML = `
+        <input class="form-input" value="${esc(currentText)}" style="flex:1">
+        <div style="display:flex;gap:var(--spacing-xs)">
+          <button class="btn btn-sm btn-primary save-edit-btn" data-type="${type}" data-idx="${idx}">บันทึก</button>
+          <button class="btn btn-sm btn-ghost cancel-edit-btn">ยกเลิก</button>
+        </div>`;
+
+      listItem.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+        listItem.innerHTML = `<span>${esc(currentText)}</span>
+          <button class="btn btn-sm btn-ghost edit-item-btn" data-type="${type}" data-index="${idx}">แก้ไข</button>`;
+        rebindEditButtons();
+      });
+
+      listItem.querySelector('.save-edit-btn').addEventListener('click', () => {
+        const newText = listItem.querySelector('input').value.trim();
+        if (!newText) return;
+        if (type === 'WORK' && aiPreviewData.items && aiPreviewData.items[idx]) {
+          aiPreviewData.items[idx].description = newText;
+        } else if (type === 'PROBLEM' && aiPreviewData.problems && aiPreviewData.problems[idx]) {
+          if (aiPreviewData.problems[idx].title) aiPreviewData.problems[idx].title = newText;
+          aiPreviewData.problems[idx].description = newText;
+        } else if (type === 'SOLUTION' && aiPreviewData.solutions && aiPreviewData.solutions[idx]) {
+          aiPreviewData.solutions[idx].description = newText;
+        }
+        listItem.innerHTML = `<span>${esc(newText)}</span>
+          <button class="btn btn-sm btn-ghost edit-item-btn" data-type="${type}" data-index="${idx}">แก้ไข</button>`;
+        rebindEditButtons();
+        showToast('แก้ไขสำเร็จ', 'success');
+      });
+    });
+  });
 }
 
 function esc(val) {
