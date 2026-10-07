@@ -68,12 +68,14 @@ class APIClient {
     };
     
     try {
+      const formBody = 'payload=' + encodeURIComponent(JSON.stringify(payload));
       const response = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: formBody
       });
       
       return await this.handleResponse(response);
