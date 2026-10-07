@@ -20,6 +20,8 @@ const router = {
 
     if (page === 'dashboard') {
       this.renderDashboard(main);
+    } else if (page === 'worklog') {
+      renderWorkLogPage();
     } else if (page === 'admin-announcements' && auth.isAdmin()) {
       renderAdminAnnouncements();
     } else {
