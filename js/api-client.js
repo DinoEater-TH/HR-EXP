@@ -68,14 +68,13 @@ class APIClient {
     };
     
     try {
-      const formBody = 'payload=' + encodeURIComponent(JSON.stringify(payload));
       const response = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'text/plain',
           'Accept': 'application/json'
         },
-        body: formBody
+        body: JSON.stringify(payload)
       });
       
       return await this.handleResponse(response);
@@ -275,6 +274,10 @@ class APIClient {
   
   async uploadAttachment(data) {
     return this.post('attachment.upload', data);
+  }
+  
+  async listAttachments(params = {}) {
+    return this.get('attachment.list', params);
   }
   
   async getAttachment(id) {

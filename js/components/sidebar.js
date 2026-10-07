@@ -15,6 +15,7 @@ function renderSidebar() {
     <nav class="sidebar-nav" aria-label="เมนูหลัก">
       <button class="sidebar-link" data-page="dashboard" type="button">🏠 แดชบอร์ด</button>
       <button class="sidebar-link" data-page="worklog" type="button">📝 บันทึกงาน</button>
+      <button class="sidebar-link" data-page="problems" type="button">🔧 ปัญหาและวิธีแก้</button>
       <button class="sidebar-link" type="button" disabled>📚 องค์ความรู้ <span>เร็ว ๆ นี้</span></button>
       ${isAdmin ? `
         <hr style="margin:var(--spacing-sm) 0;border-color:var(--border-color)">

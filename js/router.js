@@ -22,6 +22,8 @@ const router = {
       this.renderDashboard(main);
     } else if (page === 'worklog') {
       renderWorkLogPage();
+    } else if (page === 'problems') {
+      renderProblemsPage();
     } else if (page === 'admin-announcements' && auth.isAdmin()) {
       renderAdminAnnouncements();
     } else {
@@ -85,9 +87,15 @@ const router = {
         <article class="stats-card"><div class="stats-icon">🌱</div><p class="stats-label">ระดับปัจจุบัน</p><p class="stats-value">${user ? user.levelId || 'LV-01' : 'LV-01'}</p></article>
       </section>
       <section class="card">
-        <h2 class="card-title">Phase 2: Authentication + Mandatory Announcement</h2>
-        <p class="mt-md">ระบบ Login, การยืนยันตัวตน, และระบบประกาศบังคับรับทราบ พร้อมใช้งานแล้ว</p>
+        <h2 class="card-title">พร้อมใช้งาน</h2>
+        <p class="mt-md">บันทึกงาน · ปัญหาและวิธีแก้ · ประกาศบังคับรับทราบ</p>
+        <div class="table-actions mt-md">
+          <button class="btn btn-primary" id="go-worklog-btn">บันทึกงาน</button>
+          <button class="btn btn-outline" id="go-problems-btn">ปัญหาและวิธีแก้</button>
+        </div>
       </section>`;
+    document.getElementById('go-worklog-btn')?.addEventListener('click', () => router.go('worklog'));
+    document.getElementById('go-problems-btn')?.addEventListener('click', () => router.go('problems'));
   }
 };
 

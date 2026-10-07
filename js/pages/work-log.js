@@ -123,6 +123,12 @@ async function confirmAndSave() {
   });
 
   if (result.success) {
+    const pCount = (result.problems && result.problems.length) || 0;
+    const sCount = (result.solutions && result.solutions.length) || 0;
+    let extra = '';
+    if (pCount > 0 || sCount > 0) {
+      extra = `<p style="margin-top:var(--spacing-sm);color:var(--text-secondary)">สร้างปัญหา ${pCount} รายการ · วิธีแก้ ${sCount} รายการ</p>`;
+    }
     showToast('บันทึกสำเร็จ!', 'success');
     document.getElementById('worklog-input-section').classList.add('hidden');
     document.getElementById('ai-preview-section').classList.add('hidden');
@@ -132,11 +138,15 @@ async function confirmAndSave() {
       <div class="empty-state">
         <div class="empty-state-icon">✅</div>
         <h3 class="empty-state-title">บันทึกสำเร็จ</h3>
-        <button class="btn btn-primary mt-md" id="new-worklog-btn">บันทึกงานใหม่</button>
+        <p style="font-size:var(--font-size-sm);color:var(--text-tertiary)">Event: ${esc(result.eventId || result.data?.eventId || '')}</p>
+        ${extra}
+        <div class="table-actions" style="justify-content:center;margin-top:var(--spacing-md)">
+          <button class="btn btn-primary" id="new-worklog-btn">บันทึกงานใหม่</button>
+          <button class="btn btn-outline" id="go-problems-from-wl">ดูปัญหาและวิธีแก้</button>
+        </div>
       </div>`;
-    document.getElementById('new-worklog-btn').addEventListener('click', () => {
-      renderWorkLogPage();
-    });
+    document.getElementById('new-worklog-btn').addEventListener('click', () => renderWorkLogPage());
+    document.getElementById('go-problems-from-wl')?.addEventListener('click', () => router.go('problems'));
     loadWorkLogList();
   } else {
     showToast(result.error || 'บันทึกไม่สำเร็จ', 'error');
