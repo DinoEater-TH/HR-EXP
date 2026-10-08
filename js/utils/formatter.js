@@ -8,19 +8,19 @@ class Formatter {
     return el.innerHTML;
   }
   
-  static formatDate(dateString, format = SYSTEM_CONSTANTS.DATE_FORMATS.DATE) {
+  static formatDate(dateString, format = APP_CONSTANTS.DATE_FORMATS.DATE) {
     if (!dateString) return "N/A";
     
     const date = new Date(dateString);
     
     switch (format) {
-      case SYSTEM_CONSTANTS.DATE_FORMATS.DATE:
+      case APP_CONSTANTS.DATE_FORMATS.DATE:
         return date.toLocaleDateString(SYSTEM_CONSTANTS.DATE_LOCALE, {
           year: 'numeric',
           month: 'long',
           day: 'numeric'
         });
-      case SYSTEM_CONSTANTS.DATE_FORMATS.DATETIME:
+      case APP_CONSTANTS.DATE_FORMATS.DATETIME:
         return date.toLocaleString(SYSTEM_CONSTANTS.DATE_LOCALE, {
           year: 'numeric',
           month: 'long',
@@ -29,7 +29,7 @@ class Formatter {
           minute: '2-digit',
           second: '2-digit'
         });
-      case SYSTEM_CONSTANTS.DATE_FORMATS.ISO:
+      case APP_CONSTANTS.DATE_FORMATS.ISO:
         return date.toISOString();
       default:
         return date.toLocaleDateString();
