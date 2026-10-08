@@ -52,11 +52,12 @@ function renderKnowledgePage(initialKnowledgeId) {
       </div>
     </section>
 
-    <!-- ค้นหา & ตัวกรอง -->
+    <!-- ค้นหา & ตัวกรอง (AI) -->
     <section class="card mb-lg">
-      <div class="form-row">
+      <div class="form-row" style="align-items:flex-end">
         <div class="form-group" style="flex:2">
-          <input class="form-input" id="search-query" placeholder="🔍 พิมพ์คำค้นหา เช่น คอมพิวเตอร์, เอกสาร...">
+          <label style="font-size:var(--font-size-xs);color:var(--text-tertiary);margin-bottom:4px;display:block">🔍 ค้นหาด้วย AI (ภาษาธรรมชาติ)</label>
+          <input class="form-input" id="search-query" placeholder="เช่น 'คอมเปิดไม่ติดต้องทำไง' หรือ 'วิธีลงทะเบียนนักศึกษาใหม่'">
         </div>
         <div class="form-group">
           <select class="form-select" id="filter-category">
@@ -69,8 +70,15 @@ function renderKnowledgePage(initialKnowledgeId) {
           </select>
         </div>
         <div class="form-group" style="flex:0">
-          <button class="btn btn-outline" id="btn-search-kb">ค้นหา</button>
+          <button class="btn btn-primary" id="btn-search-kb">ค้นหา</button>
         </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:var(--spacing-sm);margin-top:var(--spacing-sm);padding-top:var(--spacing-sm);border-top:1px solid var(--border-color)">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:var(--font-size-sm)">
+          <input type="checkbox" id="ai-search-toggle" checked style="accent-color:var(--color-secondary)">
+          <span>🧠 AI Semantic Search</span>
+        </label>
+        <span style="font-size:var(--font-size-xs);color:var(--text-tertiary)">(เข้าใจคำถามภาษาไทย ค้นหาจากความหมาย)</span>
       </div>
     </section>
 
@@ -111,16 +119,27 @@ async function loadKnowledgeList() {
 async function searchKnowledge() {
   const container = document.getElementById('kb-list');
   if (!container) return;
-  container.innerHTML = '<p>กำลังค้นหา...</p>';
+  container.innerHTML = '<p style="text-align:center;padding:var(--spacing-lg)">🧠 กำลังค้นหาด้วย AI...</p>';
 
   const query = document.getElementById('search-query').value.trim();
   const category = document.getElementById('filter-category').value;
+  const useAI = document.getElementById('ai-search-toggle').checked;
 
-  const result = await api.searchKnowledge(query, { category });
-  renderKnowledgeCards(result, container);
+  if (!query) {
+    loadKnowledgeList();
+    return;
+  }
+
+  let result;
+  if (useAI) {
+    result = await api.searchKnowledgeAI(query, { category });
+  } else {
+    result = await api.searchKnowledge(query, { category });
+  }
+  renderKnowledgeCards(result, container, useAI);
 }
 
-function renderKnowledgeCards(result, container) {
+function renderKnowledgeCards(result, container, useAI) {
   if (!result.success) {
     container.innerHTML = `<p class="form-error">${esc(result.error || 'เกิดข้อผิดพลาดในการโหลด')}</p>`;
     return;
@@ -128,23 +147,46 @@ function renderKnowledgeCards(result, container) {
 
   const list = result.data || [];
   const countBadge = document.getElementById('kb-count');
-  if (countBadge) countBadge.textContent = `${list.length} รายการ`;
+  if (countBadge) countBadge.textContent = `${list.length} รายการ` + (useAI ? ' (AI)' : '');
 
   if (list.length === 0) {
-    container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:var(--spacing-lg)">ไม่พบองค์ความรู้ที่ค้นหา</p>';
+    container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:var(--spacing-lg)">ไม่พบองค์ความรู้ที่ตรงกับคำค้นหา</p>';
     return;
   }
 
   const isAdmin = auth.isAdmin();
 
   let html = '';
-  list.forEach(k => {
+  list.forEach(item => {
+    // รองรับทั้ง Object แบบเก่า (item = knowledge) และแบบใหม่จาก AI (item = { knowledge, relevanceScore, aiSummary })
+    const k = item.knowledge || item;
+    const score = item.relevanceScore;
+    const summary = item.aiSummary;
+
     const statusBadge = k.status === 'PUBLISHED' ? 'badge-success' : 'badge-warning';
     const statusText = k.status === 'PUBLISHED' ? 'เผยแพร่แล้ว' : 'ร่าง/รออนุมัติ';
     const tagBadges = (k.tags || []).map(t => `<span class="badge" style="background:var(--bg-tertiary);margin-right:4px">#${esc(t)}</span>`).join('');
 
+    var scoreBar = '';
+    if (score !== undefined) {
+      var scorePercent = Math.min(score, 100);
+      var scoreColor = score >= 80 ? 'var(--color-success)' : score >= 40 ? 'var(--color-secondary)' : 'var(--color-warning)';
+      scoreBar = `
+        <div style="margin-bottom:var(--spacing-xs)">
+          <div style="display:flex;justify-content:space-between;font-size:var(--font-size-xs);margin-bottom:2px">
+            <span style="color:${scoreColor};font-weight:bold">🧠 ความเกี่ยวข้อง ${score}%</span>
+            <span style="color:var(--text-tertiary)">${esc(summary || '')}</span>
+          </div>
+          <div style="background:var(--bg-tertiary);border-radius:var(--border-radius-full);height:4px;overflow:hidden">
+            <div style="background:${scoreColor};height:100%;width:${scorePercent}%;border-radius:var(--border-radius-full)"></div>
+          </div>
+        </div>
+      `;
+    }
+
     html += `
       <div class="list-item" style="flex-direction:column;align-items:stretch;gap:var(--spacing-sm);cursor:pointer" onclick="openKnowledgeDetail('${esc(k.knowledgeId)}')">
+        ${scoreBar}
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--spacing-sm)">
           <strong style="font-size:var(--font-size-lg);color:var(--color-primary)">${esc(k.title)}</strong>
           <div style="display:flex;gap:var(--spacing-xs)">
