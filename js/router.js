@@ -27,6 +27,8 @@ const router = {
       renderWorkLogPage();
     } else if (pageName === 'problems') {
       renderProblemsPage();
+    } else if (pageName === 'exp-profile') {
+      renderExpProfilePage();
     } else if (pageName === 'knowledge') {
       renderKnowledgePage(params.get('id'));
     } else if (pageName === 'admin-announcements' && auth.isAdmin()) {
@@ -88,8 +90,12 @@ const router = {
       </section>
       <section class="stats-grid">
         <article class="stats-card"><div class="stats-icon">📝</div><p class="stats-label">บันทึกงาน</p><p class="stats-value">-</p></article>
-        <article class="stats-card"><div class="stats-icon">🏆</div><p class="stats-label">EXP ของฉัน</p><p class="stats-value">${user ? user.totalExp || 0 : 0}</p></article>
-        <article class="stats-card"><div class="stats-icon">🌱</div><p class="stats-label">ระดับปัจจุบัน</p><p class="stats-value">${user ? user.levelId || 'LV-01' : 'LV-01'}</p></article>
+        <article class="stats-card" style="cursor:pointer" onclick="router.go('exp-profile')">
+          <div class="stats-icon">🏆</div><p class="stats-label">EXP ของฉัน</p><p class="stats-value">${user ? user.totalExp || 0 : 0}</p>
+        </article>
+        <article class="stats-card" style="cursor:pointer" onclick="router.go('exp-profile')">
+          <div class="stats-icon">🌱</div><p class="stats-label">ระดับปัจจุบัน</p><p class="stats-value">${user ? user.levelId || 'LV-01' : 'LV-01'}</p>
+        </article>
       </section>
       <section class="card">
         <h2 class="card-title">พร้อมใช้งาน</h2>

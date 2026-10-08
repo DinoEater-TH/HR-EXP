@@ -16,6 +16,7 @@ function renderSidebar() {
       <button class="sidebar-link" data-page="dashboard" type="button">🏠 แดชบอร์ด</button>
       <button class="sidebar-link" data-page="worklog" type="button">📝 บันทึกงาน</button>
       <button class="sidebar-link" data-page="problems" type="button">🔧 ปัญหาและวิธีแก้</button>
+      <button class="sidebar-link" data-page="exp-profile" type="button">🏆 EXP & Level</button>
       <button class="sidebar-link" data-page="knowledge" type="button">📚 องค์ความรู้</button>
       ${isAdmin ? `
         <hr style="margin:var(--spacing-sm) 0;border-color:var(--border-color)">
