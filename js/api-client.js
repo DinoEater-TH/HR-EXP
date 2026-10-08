@@ -215,6 +215,10 @@ class APIClient {
   async searchKnowledge(query, params = {}) {
     return this.get('knowledge.search', { query: query, ...params });
   }
+
+  async searchKnowledgeAI(query, params = {}) {
+    return this.post('knowledge.searchAI', { query: query, limit: 10, ...params });
+  }
   
   async getKnowledge(id) {
     return this.get('knowledge.get', { id: id });
