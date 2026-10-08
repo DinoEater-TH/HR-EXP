@@ -158,7 +158,10 @@ async function loadProblems() {
             <button class="btn btn-sm btn-primary add-solution-btn" data-id="${esc(p.problemId)}" data-event="${esc(p.eventId || '')}">+ เสนอวิธีแก้</button>
             <button class="btn btn-sm btn-outline mark-progress-btn" data-id="${esc(p.problemId)}">กำลังดำเนินการ</button>
           ` : ''}
-          ${p.status === 'RESOLVED' ? `<span class="badge badge-success">แก้ไขแล้ว</span>` : ''}
+          ${p.status === 'RESOLVED' ? `
+            <span class="badge badge-success">แก้ไขแล้ว</span>
+            <button class="btn btn-sm btn-outline" onclick="window.openCreateKnowledgeModal('${esc(p.problemId)}', '${esc(p.title.replace(/'/g, "\\'"))}', '${esc((p.description || '').substring(0, 150).replace(/'/g, "\\'"))}', '${esc(p.category || 'Other')}')">📚 สร้างองค์ความรู้</button>
+          ` : ''}
         </div>
         <div id="sol-form-${esc(p.problemId)}" class="hidden" style="margin-top:var(--spacing-sm)"></div>
       </div>`;

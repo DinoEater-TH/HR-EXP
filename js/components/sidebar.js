@@ -16,9 +16,10 @@ function renderSidebar() {
       <button class="sidebar-link" data-page="dashboard" type="button">🏠 แดชบอร์ด</button>
       <button class="sidebar-link" data-page="worklog" type="button">📝 บันทึกงาน</button>
       <button class="sidebar-link" data-page="problems" type="button">🔧 ปัญหาและวิธีแก้</button>
-      <button class="sidebar-link" type="button" disabled>📚 องค์ความรู้ <span>เร็ว ๆ นี้</span></button>
+      <button class="sidebar-link" data-page="knowledge" type="button">📚 องค์ความรู้</button>
       ${isAdmin ? `
         <hr style="margin:var(--spacing-sm) 0;border-color:var(--border-color)">
+        <button class="sidebar-link" data-page="knowledge" type="button">📚 จัดการองค์ความรู้</button>
         <button class="sidebar-link" data-page="admin-announcements" type="button">📢 จัดการประกาศ</button>
       ` : ''}
     </nav>`;

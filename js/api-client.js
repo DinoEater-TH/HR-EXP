@@ -208,6 +208,10 @@ class APIClient {
     return this.post('knowledge.create', data);
   }
   
+  async listKnowledge(params = {}) {
+    return this.get('knowledge.list', params);
+  }
+  
   async searchKnowledge(query, params = {}) {
     return this.get('knowledge.search', { query: query, ...params });
   }
@@ -221,7 +225,7 @@ class APIClient {
   }
   
   async approveKnowledge(id) {
-    return this.post('knowledge.approve', { id: id });
+    return this.post('knowledge.publish', { id: id });
   }
   
   // ===== Feedback API =====

@@ -18,13 +18,18 @@ const router = {
       return;
     }
 
-    if (page === 'dashboard') {
+    const [pageName, queryString] = page.split('?');
+    const params = new URLSearchParams(queryString || '');
+
+    if (pageName === 'dashboard') {
       this.renderDashboard(main);
-    } else if (page === 'worklog') {
+    } else if (pageName === 'worklog') {
       renderWorkLogPage();
-    } else if (page === 'problems') {
+    } else if (pageName === 'problems') {
       renderProblemsPage();
-    } else if (page === 'admin-announcements' && auth.isAdmin()) {
+    } else if (pageName === 'knowledge') {
+      renderKnowledgePage(params.get('id'));
+    } else if (pageName === 'admin-announcements' && auth.isAdmin()) {
       renderAdminAnnouncements();
     } else {
       this.renderDashboard(main);
@@ -92,10 +97,12 @@ const router = {
         <div class="table-actions mt-md">
           <button class="btn btn-primary" id="go-worklog-btn">บันทึกงาน</button>
           <button class="btn btn-outline" id="go-problems-btn">ปัญหาและวิธีแก้</button>
+          <button class="btn btn-ghost" id="go-knowledge-btn">📚 คลังความรู้</button>
         </div>
       </section>`;
     document.getElementById('go-worklog-btn')?.addEventListener('click', () => router.go('worklog'));
     document.getElementById('go-problems-btn')?.addEventListener('click', () => router.go('problems'));
+    document.getElementById('go-knowledge-btn')?.addEventListener('click', () => router.go('knowledge'));
   }
 };
 
